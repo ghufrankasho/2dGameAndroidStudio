@@ -1,10 +1,8 @@
-package com.example.game2;
+package com.example.game2.Object;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-
-import androidx.core.content.ContextCompat;
 
 public  abstract class Circle extends GameObject{
     protected  double radius;

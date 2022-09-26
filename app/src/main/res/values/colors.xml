@@ -8,5 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="magnata">#FFFF00ff</color>
+    <color name="enemy">#FFFF000F</color>
 
 </resources>

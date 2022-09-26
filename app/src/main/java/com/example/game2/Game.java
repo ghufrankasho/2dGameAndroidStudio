@@ -9,10 +9,15 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.core.content.ContextCompat;
+
+import com.example.game2.Object.Enemy;
+import com.example.game2.Object.Player;
+
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-     private GameLoop gameLoop;
-     private final   Player player;
+    private final Enemy enemy;
+    private GameLoop gameLoop;
+     private final Player player;
      private  final JoyStick joystick;
 
 
@@ -24,7 +29,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         gameLoop=new GameLoop(this,surfaceHolder);
         joystick=new JoyStick(275,700,70,40);
         //initialize the player
-         player=new Player(getContext(),2*500,500,30);
+         player=new Player(getContext(),joystick,2*500,500,30);
+         enemy=new Enemy(getContext(),player,50,500,200,30);
         setFocusable(true);
     }
     public boolean onTouchEvent(MotionEvent event) {
@@ -72,6 +78,7 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
         drawFps(canvas);
 
         joystick.draw(canvas); player.draw(canvas);
+        enemy.draw(canvas);
     }
     public void drawups(Canvas canvas){
         String avarageUps;
@@ -96,7 +103,8 @@ public class Game extends SurfaceView implements SurfaceHolder.Callback {
     public void update() {
         //initialize Game status
         joystick.update();
-        player.update(joystick);
+        player.update();
+        enemy.update();
 
     }
 }
