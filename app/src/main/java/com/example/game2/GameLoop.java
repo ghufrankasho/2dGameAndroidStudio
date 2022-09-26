@@ -8,14 +8,15 @@ import com.example.game2.Game;
 import kotlin.jvm.Synchronized;
 
 public class GameLoop extends  Thread{
+    public static final double MAX_UPS =30.0 ;
     private boolean isRunning=false;
     private SurfaceHolder surfaceHolder;
     private Game game;
     private double averageUPS;
     Canvas canvas;
     private double averageFPS;
-    private static final double Max_ups =30.0;
-    private static final double UPS_PERIOD =1E+3/Max_ups;
+
+    private static final double UPS_PERIOD =1E+3/MAX_UPS;
 
     public GameLoop(Game game, SurfaceHolder surfaceHolder) {
         this.surfaceHolder=surfaceHolder;
@@ -92,7 +93,7 @@ public class GameLoop extends  Thread{
             }
 
             //Skip frame to keep up target UPS
-            while(sleepTime<0 && updateCount<Max_ups){
+            while(sleepTime<0 && updateCount<MAX_UPS){
 
                 game.update();
                 updateCount++;

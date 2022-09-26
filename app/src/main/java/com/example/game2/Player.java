@@ -8,32 +8,50 @@ import android.view.View;
 
 import androidx.core.content.ContextCompat;
 
-public class Player {
-    private double positionx,positiony,radius;
-    private Paint paint;
-   public Player(Context context,double positionx,double positiony,double radius){
+public class Player extends Circle {
+    private final JoyStick joyStick;
+    double actuatorX;
+    double actuatorY;
+    private static final double SPEED_PIXELS_PER_SECOND=400.0;
+    private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
 
-       this.positionx=positionx;
-       this.positiony=positiony;
-       this.radius=radius;
-       paint=new Paint();
 
-       int color= ContextCompat.getColor(context,R.color.magnata);
-       paint.setColor(color);
+   public Player(Context context,JoyStick joyStick,double positionx,double positiony,double radius){
+     super(context,ContextCompat.getColor(context,R.color.magnata),positionx,positiony,radius);
+     this.joyStick=joyStick;
+
 
    }
 
 
-    public void draw(Canvas canvas) {
-       canvas.drawCircle((float) positionx,(float) positiony,(float) radius,paint);
-    }
 
+
+
+
+    public void setPosition(double positionx, double positiony) {
+   this.positionx=positionx;
+    this.positiony=positiony;
+    }
     public void update() {
 
+        // Update velocity based on actuator of joystick
+
+        velocityX = joyStick.getActuatorX() * MAX_SPEED;
+        velocityY = joyStick.getActuatorY()*MAX_SPEED;
+
+        // Update position
+        positionx += velocityX;
+        positiony += velocityY;
+
+        // Update direction
+//        if (velocityX != 0 || velocityY != 0) {
+//            // Normalize velocity to get direction (unit vector of velocity)
+//            double distance = Utils.getDistanceBetweenPoints(0, 0, velocityX, velocityY);
+//            directionX = velocityX/distance;
+//            directionY = velocityY/distance;
+//
+//        }
     }
 
-    public void setPosition(double x, double y) {
-     positionx=x;
-     positiony=y;
-    }
+
 }

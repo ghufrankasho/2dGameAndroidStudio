@@ -5,15 +5,15 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.MotionEvent;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
+
 import androidx.core.content.ContextCompat;
 public class Game extends SurfaceView implements SurfaceHolder.Callback {
 
-   private GameLoop gameLoop;
-private   Player player;
+     private GameLoop gameLoop;
+     private final   Player player;
+     private  final JoyStick joystick;
 
 
     public Game(Context context) {
@@ -22,19 +22,30 @@ private   Player player;
         surfaceHolder.addCallback(this);
 
         gameLoop=new GameLoop(this,surfaceHolder);
+        joystick=new JoyStick(275,700,70,40);
         //initialize the player
-         player=new Player(getContext(),500,500,30);
+         player=new Player(getContext(),2*500,500,30);
         setFocusable(true);
     }
     public boolean onTouchEvent(MotionEvent event) {
         //handel touch event action
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-            player.setPosition((double) event.getX(),(double) event.getY());
-                return  true;
+                if (joystick.isPressed((double)event.getX(),(double)event.getY())) {
+
+                  joystick.setIsPressed(true);
+
+                } return  true;
+
             case MotionEvent.ACTION_MOVE:
-                player.setPosition((double) event.getX(),(double) event.getY());
-                return  true;
+                 if(joystick.getIsPressed()){
+                   joystick.setActuator((double) event.getX(),(double) event.getY());
+               }return true;
+            case MotionEvent.ACTION_UP:
+                joystick.setIsPressed(false);
+                joystick.resetActuator();
+                return true;
+
         }
         return  super.onTouchEvent(event);
     }
@@ -59,7 +70,8 @@ private   Player player;
         super.draw(canvas);
         drawups(canvas);
         drawFps(canvas);
-        player.draw(canvas);
+
+        joystick.draw(canvas); player.draw(canvas);
     }
     public void drawups(Canvas canvas){
         String avarageUps;
@@ -83,6 +95,8 @@ private   Player player;
 
     public void update() {
         //initialize Game status
-        player.update();
+        joystick.update();
+        player.update(joystick);
+
     }
 }
